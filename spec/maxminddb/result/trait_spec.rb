@@ -21,14 +21,36 @@ describe MaxMindDB::Result::Traits do
     its(:is_satellite_provider) { should eq(true) }
   end
 
+  context "with an is_anonymous result" do
+    let(:raw_result) { {
+      "is_anonymous"=>true
+    } }
+
+    its(:is_anonymous) { should eq(true) }
+    its(:is_hosting_provider) { should eq(nil) }
+  end
+
+  context "with an is_satellite_provider result" do
+    let(:raw_result) { {
+      "is_hosting_provider"=>true
+    } }
+
+    its(:is_anonymous) { should eq(nil) }
+    its(:is_hosting_provider) { should eq(true) }
+  end
+
   context "with an all traits result" do
     let(:raw_result) { {
       "is_anonymous_proxy"=>true,
-      "is_satellite_provider"=>true
+      "is_satellite_provider"=>true,
+      "is_anonymous"=>true,
+      "is_hosting_provider"=>true
     } }
 
     its(:is_anonymous_proxy) { should eq(true) }
     its(:is_satellite_provider) { should eq(true) }
+    its(:is_anonymous) { should eq(true) }
+    its(:is_hosting_provider) { should eq(true) }
   end
 
   context "without a result" do
@@ -36,5 +58,7 @@ describe MaxMindDB::Result::Traits do
 
     its(:is_anonymous_proxy) { should eq(nil) }
     its(:is_satellite_provider) { should eq(nil) }
+    its(:is_anonymous) { should eq(nil) }
+    its(:is_hosting_provider) { should eq(nil) }
   end
 end
